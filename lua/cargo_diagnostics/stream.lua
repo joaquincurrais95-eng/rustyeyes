@@ -1,29 +1,24 @@
 local M = {}
-
----Crea un procesador que acumula pedazos de texto y emite líneas completas
----@param callback function Función a llamar por cada línea completa
----@return function Una función que acepta chunks de texto
 function M.new_line_processor(callback)
     local buffer = ""
-    
-    return function(chunk)
+    local function emit(line)
+        line = line:gsub("\r$", "")
+        if line ~= "" then callback(line) end
+    end
+    local function feed(chunk)
         if not chunk then return end
-        
         buffer = buffer .. chunk
-        
-        -- Buscamos saltos de línea para procesar líneas completas 
         while true do
-            local start_idx, end_idx = string.find(buffer, "\n")
-            if not start_idx then break end
-            
-            local line = string.sub(buffer, 1, start_idx - 1)
-            buffer = string.sub(buffer, end_idx + 1)
-            
-            if line ~= "" then
-                callback(line)
-            end
+            local pos = buffer:find("\n", 1, true)
+            if not pos then break end
+            emit(buffer:sub(1, pos - 1))
+            buffer = buffer:sub(pos + 1)
         end
     end
+    local function flush()
+        emit(buffer)
+        buffer = ""
+    end
+    return feed, flush
 end
-
 return M

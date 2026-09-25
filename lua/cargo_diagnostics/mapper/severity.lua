@@ -1,6 +1,6 @@
 local M = {}
 
--- Definimos las constantes manualmente para evitar llamar a vim.diagnostic 
+-- Definimos las constantes manualmente para evitar llamar a vim.diagnostic
 -- en hilos secundarios. Estos valores son estándar en Neovim.
 local SEVERITY = {
     ERROR = 1,

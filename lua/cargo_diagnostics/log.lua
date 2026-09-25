@@ -16,7 +16,7 @@ local config = {
 
 local function log(level, msg)
     if level < config.level then return end
-    
+
     -- Convertir tablas a string para que no explote el log
     if type(msg) == "table" then
         msg = vim.inspect(msg)
@@ -27,10 +27,10 @@ local function log(level, msg)
         if val == level then level_name = name break end
     end
 
-    -- Usamos vim.notify para que el usuario pueda verlo si es grave, 
+    -- Usamos vim.notify para que el usuario pueda verlo si es grave,
     -- o simplemente lo mandamos a los mensajes internos.
     local full_msg = string.format("%s [%s]: %s", config.prefix, level_name, msg)
-    
+
     if level >= M.levels.WARN then
         vim.notify(full_msg, level)
     else

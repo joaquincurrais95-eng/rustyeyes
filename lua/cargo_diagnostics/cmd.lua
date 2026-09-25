@@ -18,7 +18,7 @@ function M.build_command(ctx, preset, extra_args)
 
     -- Si estamos en un workspace, podemos querer compilar todo o el crate específico.
     -- Por defecto, al ejecutar en el workspace_root, cargo detecta los miembros.
-    
+
     -- Unimos con argumentos adicionales si existen
     for _, arg in ipairs(extra_args) do
         table.insert(args, arg)
@@ -26,22 +26,22 @@ function M.build_command(ctx, preset, extra_args)
 
     return {
         args = args,
-        cwd = ctx.cwd --[cite: 4, 5]
+        cwd = ctx.cwd --
     }
 end
 
----Función de utilidad para depuración 
+---Función de utilidad para depuración
 function M.log_debug_command(bufnr)
     local root = require("cargo_diagnostics.root")
     local ctx = root.get_run_context(bufnr)
-    
+
     if not ctx then
         print("Error: No se encontró un proyecto Rust (Cargo.toml)")
         return
     end
 
     local cmd = M.build_command(ctx, "check")
-    
+
     print(string.format("[Cargo Debug]"))
     print(string.format("  CWD: %s", cmd.cwd))
     print(string.format("  CMD: %s", table.concat(cmd.args, " ")))
